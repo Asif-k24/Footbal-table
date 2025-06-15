@@ -1,16 +1,15 @@
-import { ModalComponent } from '../components/Modal/Modal';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchData } from '../redux/slice/dataSlice';
-import React, { useState, useEffect } from 'react';
-import ClubLogo from "../assets/data.json"
-import '../components/Modal/Modal.css'
-import Modal from 'react-modal';
-import '../App.css';
+import { ModalComponent } from "../components/Modal/Modal";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchData } from "../redux/slice/dataSlice";
+import React, { useState, useEffect } from "react";
+import ClubLogo from "../assets/data.json";
+import "../components/Modal/Modal.css";
+import Modal from "react-modal";
+import "../App.css";
 
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
 export default function FootballTable() {
-
   const dispatch = useDispatch();
   const { loading, error, processedData } = useSelector((state) => state.data);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,15 +38,14 @@ export default function FootballTable() {
 
   return (
     <>
-      <div className='font-type'>
-
-        <main className='container'>
-          <h1 className='text-center'>Premier League Table 2020/2021</h1>
-          <table className='table-margin'>
+      <div className="font-type">
+        <main className="container">
+          <h1 className="text-center">Premier League Table 2020/2021</h1>
+          <table className="table-margin">
             <thead>
               <tr>
                 <th>Position</th>
-                <th className='th-club'>Club</th>
+                <th className="th-club">Club</th>
                 <th>Played</th>
                 <th>Won</th>
                 <th>Drawn</th>
@@ -61,53 +59,73 @@ export default function FootballTable() {
             </thead>
 
             <tbody>
-              {
-                processedData?.map((team, index) => {
+              {processedData?.map((team, index) => {
+                // const handleCLick = () => {
+                //   navigate('/club-details/' + index)
+                // }
+                const isSpecificBorderRow = specificBorderRows.includes(
+                  index + 1
+                );
+                const rowClass = isSpecificBorderRow
+                  ? "bordered-bottom-row-darkgrey"
+                  : "bordered-bottom-row-lightgrey";
+                // console.log(team)
 
-                  // const handleCLick = () => {
-                  //   navigate('/club-details/' + index)
-                  // }
-                  const isSpecificBorderRow = specificBorderRows.includes(index + 1)
-                  const rowClass = isSpecificBorderRow ? "bordered-bottom-row-darkgrey" : "bordered-bottom-row-lightgrey"
-                  // console.log(team)
-
-                  return (
-
-                    <tr key={index} className={rowClass}>
-                      <td className='text-center'>{index + 1}</td>
-                      <td className='align-items'>
-                        {
-                          ClubLogo.logo[team.club] ? (
-                            <img style={{ width: "20px", borderRadius: "50%", marginRight: "8px" }} src={'/' + ClubLogo.logo[team.club]} alt="" />
-                          ) : ('No Logo')
-                        }
-                        <button onClick={() => handleRowClick(team)} className='button-style' style={{ all: 'unset', cursor: 'pointer' }}>
-                          <div>
-                            {team.club}
+                return (
+                  <tr key={index} className={rowClass}>
+                    <td className="text-center">{index + 1}</td>
+                    <td className="align-items">
+                      {ClubLogo.logo[team.club] ? (
+                        <img
+                          style={{
+                            width: "20px",
+                            borderRadius: "50%",
+                            marginRight: "8px",
+                          }}
+                          src={"/" + ClubLogo.logo[team.club]}
+                          alt=""
+                        />
+                      ) : (
+                        "Club Logo"
+                      )}
+                      <button
+                        onClick={() => handleRowClick(team)}
+                        className="button-style"
+                        style={{ all: "unset", cursor: "pointer" }}
+                      >
+                        <div>{team.club}</div>
+                      </button>
+                    </td>
+                    <td className="text-center">{team.played}</td>
+                    <td className="text-center">{team.won}</td>
+                    <td className="text-center">{team.drawn}</td>
+                    <td className="text-center">{team.lost}</td>
+                    <td className="text-center">{team.gf}</td>
+                    <td className="text-center">{team.ga}</td>
+                    <td className="text-center">{team.gd}</td>
+                    <td className="text-center">{team.points}</td>
+                    <td className="text-center">
+                      <div className="result">
+                        {team.form.map((result, idx) => (
+                          <div
+                            className={
+                              result === "W"
+                                ? "win"
+                                : result === "L"
+                                ? "loss"
+                                : "draw"
+                            }
+                            key={idx}
+                          >
+                            {result}
                           </div>
-                        </button>
-                      </td>
-                      <td className='text-center'>{team.played}</td>
-                      <td className='text-center'>{team.won}</td>
-                      <td className='text-center'>{team.drawn}</td>
-                      <td className='text-center'>{team.lost}</td>
-                      <td className='text-center'>{team.gf}</td>
-                      <td className='text-center'>{team.ga}</td>
-                      <td className='text-center'>{team.gd}</td>
-                      <td className='text-center'>{team.points}</td>
-                      <td className="text-center">
-                        <div className='result'>
-                          {team.form.map((result, idx) => (
-                            <div className={result === 'W' ? "win" : result === 'L' ? 'loss' : 'draw'} key={idx}>{result}</div>
-                          ))}
-                        </div>
-                      </td>
-                    </tr>
-                  )
-                })
-              }
+                        ))}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
-
           </table>
 
           <ModalComponent
@@ -115,9 +133,8 @@ export default function FootballTable() {
             onRequestClose={handleCloseModal}
             data={selectedTeam}
           />
-
         </main>
       </div>
     </>
-  )
+  );
 }
