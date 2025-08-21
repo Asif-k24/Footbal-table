@@ -1,5 +1,4 @@
 import Modal from 'react-modal';
-import React from 'react'
 
 export const ModalComponent = ({ isOpen, onRequestClose, data }) => {
     // console.log(data)
